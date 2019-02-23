@@ -2,6 +2,7 @@
 
 ###常用软件
 commonSoft=('vim' 'net-tools' 'iptables-services' 'wget' 'ntpdate')
+zabbixServer="129.204.93.132,223.119.51.10"
 
 installCommonSoft(){
 	for i in ${commonSoft[@]}
@@ -135,7 +136,7 @@ osBaseConfig(){
 ####install zabbix agent
 installZabbixAgent(){
 	zabbixRepo="http://repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-1.el7.noarch.rpm"
-	zabbixServer="129.204.93.132,223.119.51.10"
+	
 	ps aux | grep -i zabbix | grep -v grep > /dev/null 2>&1
 	if [ $? -ne 0 ]
 	then
@@ -143,6 +144,9 @@ installZabbixAgent(){
 		yum install -y zabbix-agent
 		sed -i "s/Server=127.0.0.1/Server=${zabbixServer}/" /etc/zabbix/zabbix_agentd.conf
 		sed -i "s/ServerActive=127.0.0.1/ServerActive=${zabbixServer}/" /etc/zabbix/zabbix_agentd.conf   
+		echo "Include=/etc/zabbix/zabbix_agentd.conf.d/*.conf" >> /etc/zabbix/zabbix_agentd.conf
+		
+		
 		systemctl restart zabbix-agent.service
 		systemctl enable zabbix-agent.service
 
