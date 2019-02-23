@@ -146,7 +146,8 @@ installZabbixAgent(){
 		sed -i "s/ServerActive=127.0.0.1/ServerActive=${zabbixServer}/" /etc/zabbix/zabbix_agentd.conf   
 		echo "Include=/etc/zabbix/zabbix_agentd.conf.d/*.conf" >> /etc/zabbix/zabbix_agentd.conf
 		
-		
+		mkdir /etc/zabbix/zabbix_agentd.conf.d
+		cp zabbix/* /etc/zabbix/zabbix_agentd.conf.d/
 		systemctl restart zabbix-agent.service
 		systemctl enable zabbix-agent.service
 
